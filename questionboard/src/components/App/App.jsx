@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect, act } from 'react'
 import './App.css'
-import Header from '../../Header/Header'
+import Header from '../Header/Header'
 import Ask from '../Ask/Ask'
 import Answer from "../Answer/Answer"
 import { getQuestions, getUserInfo } from '../../utils/api'
@@ -12,6 +12,7 @@ import LoginModal from '../LoginModal/LoginModal'
 import RegisterModal from '../RegisterModal/RegisterModal'
 import {register, login} from "../../utils/auth";
 import { setToken, getToken, removeToken } from '../../utils/token'
+import Main from '../Main/Main'
 
 
 function App() {
@@ -94,19 +95,16 @@ function App() {
     <LoggedInContext.Provider value={isLoggedIn}>
     <ModalContext.Provider value={{activeModal, setActiveModal, closeModal}}>
     <QuestionsContext.Provider value={questions}>
-      <div>
+      <div className='app'>
         <Header
         loginModal={() => setActiveModal("loginModal")}
         registerModal={() => setActiveModal("registerModal")}
         signOut={signOut}
+        className="header"
         />
-        <button className='switch' onClick={() => switchMode()}>{mode}</button>
-        {mode === "Ask" && (
-          <Ask/>
-        )}
-        {mode === "Answer" && (
-          <Answer/>
-        )}
+        <div className='App__body'>
+          <Main/>
+        </div>
         {activeModal === "loginModal" && (
           <LoginModal onLoginSubmit={onLoginSubmit}/>
         )}
