@@ -13,6 +13,8 @@ import RegisterModal from '../RegisterModal/RegisterModal'
 import {register, login} from "../../utils/auth";
 import { setToken, getToken, removeToken } from '../../utils/token'
 import Main from '../Main/Main'
+import User from '../User/User'
+import Footer from '../footer/Footer'
 
 
 function App() {
@@ -95,7 +97,7 @@ function App() {
     <LoggedInContext.Provider value={isLoggedIn}>
     <ModalContext.Provider value={{activeModal, setActiveModal, closeModal}}>
     <QuestionsContext.Provider value={questions}>
-      <div className='app'>
+      <div className='App'>
         <Header
         loginModal={() => setActiveModal("loginModal")}
         registerModal={() => setActiveModal("registerModal")}
@@ -103,8 +105,10 @@ function App() {
         className="header"
         />
         <div className='App__body'>
+          <User/>
           <Main/>
         </div>
+        <Footer className="app__footer"/>
         {activeModal === "loginModal" && (
           <LoginModal onLoginSubmit={onLoginSubmit}/>
         )}

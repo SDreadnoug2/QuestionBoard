@@ -1,0 +1,11 @@
+.NavButton{
+    gap: 5px;
+}
+.NavButton__image{
+    width: 90px;
+    height: 90px;
+}
+
+.NavButton__text{
+    font-size: 15px;
+}
