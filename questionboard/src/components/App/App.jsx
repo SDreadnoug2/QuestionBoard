@@ -1,33 +1,32 @@
-import { useState, useContext, useEffect, act } from 'react'
-import './App.css'
-import Header from '../Header/Header'
-import Ask from '../Ask/Ask'
-import Answer from "../Answer/Answer"
-import { getQuestions, getUserInfo } from '../../utils/api'
-import { QuestionsContext } from '../../context/QuestionsContext'
-import { ModalContext } from '../../context/ModalContext'
-import { LoggedInContext } from '../../context/LogInContext'
-import { userInfoContext } from '../../context/UserInfoContext'
-import LoginModal from '../LoginModal/LoginModal'
-import RegisterModal from '../RegisterModal/RegisterModal'
-import {register, login} from "../../utils/auth";
-import { setToken, getToken, removeToken } from '../../utils/token'
-import Main from '../Main/Main'
-import User from '../User/User'
-import Footer from '../footer/Footer'
-
+import { useState, useContext, useEffect, act } from "react";
+import "./App.css";
+import Header from "../Header/Header";
+import Ask from "../Ask/Ask";
+import Answer from "../Answer/Answer";
+import { getQuestions, getUserInfo } from "../../utils/api";
+import { QuestionsContext } from "../../context/QuestionsContext";
+import { ModalContext } from "../../context/ModalContext";
+import { LoggedInContext } from "../../context/LogInContext";
+import { userInfoContext } from "../../context/UserInfoContext";
+import LoginModal from "../LoginModal/LoginModal";
+import RegisterModal from "../RegisterModal/RegisterModal";
+import { register, login } from "../../utils/auth";
+import { setToken, getToken, removeToken } from "../../utils/token";
+import Main from "../Main/Main";
+import Footer from "../footer/Footer";
+import ProgramBox from "../ProgramBox/ProgramBox";
 
 function App() {
   const [mode, setMode] = useState("Ask");
-  const [questions, setQuestions] = useState([])
+  const [questions, setQuestions] = useState([]);
   const [activeModal, setActiveModal] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userInfo, setUserInfo] = useState({userName: '', id: ''});
+  const [userInfo, setUserInfo] = useState({ userName: "", id: "" });
 
   function loadQuestions() {
     getQuestions(getToken()).then((data) => {
-      setQuestions(data)
-    })
+      setQuestions(data);
+    });
   }
 
   const openModal = (modalName) => {
@@ -39,7 +38,7 @@ function App() {
   };
 
   function switchMode() {
-    if(mode === "Ask"){
+    if (mode === "Ask") {
       setMode("Answer");
     } else {
       setMode("Ask");
@@ -52,75 +51,76 @@ function App() {
       updateUser(data.token);
       setIsLoggedIn(true);
       closeModal();
-    })
+    });
   };
 
   const signOut = () => {
     removeToken();
     setIsLoggedIn(false);
-  }
+  };
 
   const updateUser = (jwt) => {
     getUserInfo(jwt).then((res) => {
-      setUserInfo({userName: res.username, id: res._id})
-    })
+      setUserInfo({ userName: res.username, id: res._id });
+    });
     setIsLoggedIn(true);
-  }
+  };
 
   const onRegisterSubmit = (username, password, confirmPassword) => {
-    if(password === confirmPassword){
-      register(username, password).then(() =>{
-        console.log("user registered successfully.")
-      })
+    if (password === confirmPassword) {
+      register(username, password).then(() => {
+        console.log("user registered successfully.");
+      });
     } else {
       console.log("passwords didn't match.");
     }
-  }
+  };
 
   useEffect(() => {
-    if(isLoggedIn){
+    if (isLoggedIn) {
       loadQuestions();
     }
-  },[isLoggedIn])
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const jwt = getToken();
     if (!jwt) {
       return;
-    } 
-    updateUser(jwt)
+    }
+    updateUser(jwt);
   }, []);
-
 
   return (
     <userInfoContext.Provider value={userInfo}>
-    <LoggedInContext.Provider value={isLoggedIn}>
-    <ModalContext.Provider value={{activeModal, setActiveModal, closeModal}}>
-    <QuestionsContext.Provider value={questions}>
-      <div className='App'>
-        <Header
-        loginModal={() => setActiveModal("loginModal")}
-        registerModal={() => setActiveModal("registerModal")}
-        signOut={signOut}
-        className="header"
-        />
-        <div className='App__body'>
-          <User/>
-          <Main/>
-        </div>
-        <Footer className="app__footer"/>
-        {activeModal === "loginModal" && (
-          <LoginModal onLoginSubmit={onLoginSubmit}/>
-        )}
-        {activeModal === "registerModal" && (
-          <RegisterModal onRegisterSubmit={onRegisterSubmit}/>
-        )}
-      </div>
-    </QuestionsContext.Provider>
-    </ModalContext.Provider>
-    </LoggedInContext.Provider>
+      <LoggedInContext.Provider value={isLoggedIn}>
+        <ModalContext.Provider
+          value={{ activeModal, setActiveModal, closeModal }}
+        >
+          <QuestionsContext.Provider value={questions}>
+            <div className="App">
+              <Header
+                loginModal={() => setActiveModal("loginModal")}
+                registerModal={() => setActiveModal("registerModal")}
+                signOut={signOut}
+                className="header"
+              />
+              <div className="App__body">
+                <ProgramBox />
+                <Main />
+              </div>
+              <Footer className="app__footer" />
+              {activeModal === "loginModal" && (
+                <LoginModal onLoginSubmit={onLoginSubmit} />
+              )}
+              {activeModal === "registerModal" && (
+                <RegisterModal onRegisterSubmit={onRegisterSubmit} />
+              )}
+            </div>
+          </QuestionsContext.Provider>
+        </ModalContext.Provider>
+      </LoggedInContext.Provider>
     </userInfoContext.Provider>
-  )
+  );
 }
 
-export default App
+export default App;

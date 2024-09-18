@@ -1,0 +1,34 @@
+.ProgramBox {
+  background-image: url("../../../public/assets/ProgramBox.svg");
+  width: 424px;
+  height: 368px;
+  padding: 60px 40px 40px 40px;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: space-around;
+}
+
+.ProgramBox__signIn {
+  background-image: url("../../../public/assets/SignIn.svg");
+  background-size: contain; /* Makes the image fit within the button */
+  background-repeat: no-repeat;
+  background-position: center; /* Centers the image within the button */
+  border: none; /* Removes border */
+  background-color: transparent; /* Makes background transparent */
+  padding: 0; /* Removes extra padding */
+  cursor: pointer; /* Optional: changes the cursor to a pointer */
+  outline: none; /* Removes the outline when the button is focused */
+  height: 80px;
+  width: 80px;
+  flex: 1 1 30%; /* Each item takes up approximately 30% of the container's width */
+  box-sizing: border-box; /* Include padding and borders in the width calculation */
+}
+
+.button {
+  margin: 0;
+  padding: 0;
+}
+
+.button__text {
+  text-align: center;
+}
