@@ -99,9 +99,6 @@ function App() {
           <QuestionsContext.Provider value={questions}>
             <div className="App">
               <Header
-                loginModal={() => setActiveModal("loginModal")}
-                registerModal={() => setActiveModal("registerModal")}
-                signOut={signOut}
                 className="header"
               />
               <div className="App__body">
