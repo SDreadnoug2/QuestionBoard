@@ -8,6 +8,7 @@ import { QuestionsContext } from "../../context/QuestionsContext";
 import { ModalContext } from "../../context/ModalContext";
 import { LoggedInContext } from "../../context/LogInContext";
 import { userInfoContext } from "../../context/UserInfoContext";
+import { activeProgramContext } from "../../context/ProgramContext";
 import LoginModal from "../LoginModal/LoginModal";
 import RegisterModal from "../RegisterModal/RegisterModal";
 import { register, login } from "../../utils/auth";
@@ -22,8 +23,10 @@ function App() {
   const [activeModal, setActiveModal] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState({ userName: "", id: "" });
+  const [activeProgramBox, setActiveProgram] = useState(null);
 
   function loadQuestions() {
+
     getQuestions(getToken()).then((data) => {
       setQuestions(data);
     });
@@ -91,32 +94,34 @@ function App() {
   }, []);
 
   return (
-    <userInfoContext.Provider value={userInfo}>
-      <LoggedInContext.Provider value={isLoggedIn}>
-        <ModalContext.Provider
-          value={{ activeModal, setActiveModal, closeModal }}
-        >
-          <QuestionsContext.Provider value={questions}>
-            <div className="App">
-              <Header
-                className="header"
-              />
-              <div className="App__body">
-                <ProgramBox />
-                <Main />
+    <activeProgramContext.Provider value={{activeProgramBox, setActiveProgram}}>
+      <userInfoContext.Provider value={userInfo}>
+        <LoggedInContext.Provider value={isLoggedIn}>
+          <ModalContext.Provider
+            value={{ activeModal, setActiveModal, closeModal }}
+          >
+            <QuestionsContext.Provider value={questions}>
+              <div className="App">
+                <Header
+                  className="header"
+                />
+                <div className="App__body">
+                  <ProgramBox />
+                  <Main />
+                </div>
+                <Footer className="app__footer" />
+                {activeModal === "loginModal" && (
+                  <LoginModal onLoginSubmit={onLoginSubmit} />
+                )}
+                {activeModal === "registerModal" && (
+                  <RegisterModal onRegisterSubmit={onRegisterSubmit} />
+                )}
               </div>
-              <Footer className="app__footer" />
-              {activeModal === "loginModal" && (
-                <LoginModal onLoginSubmit={onLoginSubmit} />
-              )}
-              {activeModal === "registerModal" && (
-                <RegisterModal onRegisterSubmit={onRegisterSubmit} />
-              )}
-            </div>
-          </QuestionsContext.Provider>
-        </ModalContext.Provider>
-      </LoggedInContext.Provider>
-    </userInfoContext.Provider>
+            </QuestionsContext.Provider>
+          </ModalContext.Provider>
+        </LoggedInContext.Provider>
+      </userInfoContext.Provider>
+    </activeProgramContext.Provider>
   );
 }
 

@@ -3,6 +3,9 @@
     width: 903px;
     height: 751px;
     border-radius: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .Main__button{
